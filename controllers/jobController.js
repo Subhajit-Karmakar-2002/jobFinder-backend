@@ -6,8 +6,8 @@ const createJob = async (req, res) => {
     const job = new Job(req.body);
     try {
         const saveJob = await job.save();
-        const { __v, createdAt, updatedAt, ...info } = saveJob._dov;
-        res.status(200).json(info);
+        const { __v, createdAt, updatedAt, ...info } = saveJob._doc;
+        res.status(201).json(info);
     } catch (error) {
         res.status(500).json(error);
     }
@@ -15,15 +15,29 @@ const createJob = async (req, res) => {
 
 const updateJob = async (req, res) => {
     try {
-        await User.findByIdAndDelete(req.params.id);
-        res.status(200).json("User has been deleted");
+        const job = await Job.findByIdAndUpdate(req.params.id,
+            {
+                $set: req.body,
+            },
+            { new: true }
+        );
+        if (!job) {
+            return res.status(404).json({ message: "Job not found" });
+        }
+        console.log(job);
+        const { __v, createdAt, updatedAt, ...info } = job._doc;
+        res.status(200).json(info);
     } catch (error) {
         res.status(500).json(error);
     }
 }
+
 const deleteJob = async (req, res) => {
     try {
-        await User.findByIdAndDelete(req.params.id);
+        const job = await Job.findByIdAndDelete(req.params.id);
+        if (!job) {
+            return res.status(404).json({ message: "Job not found" });
+        }
         res.status(200).json("User has been deleted");
     } catch (error) {
         res.status(500).json(error);
@@ -32,9 +46,11 @@ const deleteJob = async (req, res) => {
 
 const getJob = async (req, res) => {
     try {
-        const users = await User.findById(req.params.id);
-        const { password, createdAt, updatedAt, __v, ...others } = users._doc;
-        res.status(200).json(others);
+        const job = await Job.findById(req.params.id);
+        if (!job) {
+            return res.status(404).json({ message: "Job not found" });
+        }
+        res.status(200).json(job);
     } catch (error) {
         res.status(500).json(error);
     }
@@ -43,13 +59,39 @@ const getJob = async (req, res) => {
 
 const getAllJob = async (req, res) => {
     try {
-        const users = await User.find();
-        console.log(users);
-        res.status(200).json(users);
+        const job = await Job.find();
+        if (!job) {
+            return res.status(404).json({ message: "Job not found" });
+        }
+        res.status(200).json(job);
+    } catch (error) {
+        res.status(500).json(error);
+    }
+}
+const searchJob = async (req, res) => {
+    try {
+        const job = await Job.aggregate(
+            [
+                {
+                    $search: {
+                        index: "jobsearch",
+                        text: {
+                            query: req.params.key,
+                            path: {
+                                wildcard: "*"
+                            }
+                        }
+                    }
+                }
+            ]
+        );
+
+
+        res.status(200).json(job);
     } catch (error) {
         res.status(500).json(error);
     }
 }
 
 
-module.exports = { createJob, updateJob, getJob, getAllJob, deleteJob }
+module.exports = { createJob, updateJob, getJob, getAllJob, deleteJob, searchJob }

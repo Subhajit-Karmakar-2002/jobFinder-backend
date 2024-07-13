@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const authRoute = require('./routes/auth')
 const userRoute = require('./routes/user')
 const jobRoute = require('./routes/job')
+const bookmarkRoute = require('./routes/bookmark')
 
 
 
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use("/api/", authRoute);
 app.use("/api/jobs", jobRoute);
 app.use("/api/users", userRoute);
+app.use("/api/bookmarks", bookmarkRoute);
 
 
 app.listen(port || 5001, () => console.log(`Listening on port ${port}!`))
