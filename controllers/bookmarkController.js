@@ -33,7 +33,7 @@ const deleteBookmark = async (req, res) => {
 
 const getBookmarks = async (req, res) => {
     try {
-        const result = await Bookmark.find({ userId: req.params.userId });
+        const result = await Bookmark.find({ userId: req.user.id }).populate('job');
 
         res.status(200).json(result);
     } catch (error) {

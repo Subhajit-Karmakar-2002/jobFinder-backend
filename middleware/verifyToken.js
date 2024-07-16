@@ -10,8 +10,6 @@ const verifyToken = (req, res, next) => {
         jwt.verify(token, process.env.JWT_SEC, (err, user) => {
             if (err) res.status(403).json("Token is not valid!");
             req.user = user;
-
-            console.log(user);
             next();
         });
     }
@@ -22,7 +20,7 @@ const verifyToken = (req, res, next) => {
 
 const verifyAndAuthorization = (req, res, next) => {
     verifyToken(req, res, () => {
-        if (req.user.id === req.params.id) {
+        if (req.user.id) {
             next();
         }
         else {
@@ -30,6 +28,7 @@ const verifyAndAuthorization = (req, res, next) => {
         }
     });
 }
+
 const verifyAndAdmin = (req, res, next) => {
     verifyToken(req, res, () => {
         if (req.user.isAdmin) {

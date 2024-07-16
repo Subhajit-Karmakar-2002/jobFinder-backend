@@ -13,7 +13,7 @@ router.delete("/:id", bookmarkController.deleteBookmark);
 
 
 // GET BOOKMARKS
-router.get("/:userId", bookmarkController.getBookmarks);
+router.get("/",verifyAndAuthorization, bookmarkController.getBookmarks);
 
 
 
