@@ -24,8 +24,11 @@ const createBookmark = async (req, res) => {
 
 const deleteBookmark = async (req, res) => {
     try {
-        await Bookmark.findByIdAndDelete(req.params.id);
+        const jobid = req.params.id;
+        const userId = req.user.id;
+        await Bookmark.findOneAndDelete({ 'userId': userId, 'job': jobid });
         res.status(200).json("Bookmark deleted Success");
+
     } catch (error) {
         res.status(500).json(error);
     }
