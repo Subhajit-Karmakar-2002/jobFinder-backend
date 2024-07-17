@@ -24,4 +24,4 @@ const ChatSchema = new mongoose.Schema(
     }
 );
 
-module.exports = mongoose.model("Bookmark", ChatSchema);
+module.exports = mongoose.model("Chat", ChatSchema);
