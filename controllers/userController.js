@@ -9,7 +9,7 @@ const updateUser = async (req, res) => {
 
     try {
         const updatedUser = await User.findByIdAndUpdate(
-            req.params.id,
+            req.user.id,
             {
                 $set: req.body,
             },
@@ -27,7 +27,7 @@ const updateUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
     try {
-        await User.findByIdAndDelete(req.params.id);
+        await User.findByIdAndDelete(req.user.id);
         res.status(200).json("User has been deleted");
     } catch (error) {
         res.status(500).json(error);
@@ -36,7 +36,7 @@ const deleteUser = async (req, res) => {
 
 const getUser = async (req, res) => {
     try {
-        const users = await User.findById(req.params.id);
+        const users = await User.findById(req.user.id);
         const { password, createdAt, updatedAt, __v, ...others } = users._doc;
         res.status(200).json(others);
     } catch (error) {
