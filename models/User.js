@@ -8,6 +8,7 @@ const UserSchema = new mongoose.Schema({
     isAdmin: { type: Boolean, required: false },
     isAgent: { type: Boolean, required: false },
     skills: { type: Array, required: false },
+    phone: { type: String, required: false },
     profile: {
         type: String,
         required: false,
