@@ -7,7 +7,9 @@ const createUser = async (req, res) => {
     const newUser = new User({
         username: req.body.username,
         email: req.body.email,
-        password: cryptojs.AES.encrypt(req.body.password, process.env.PASS_SEC).toString()
+        password: cryptojs.AES.encrypt(req.body.password, process.env.PASS_SEC).toString(),
+        isAdmin: req.body.isadmin,
+        isAgent: req.body.isagent
     });
 
     try {
