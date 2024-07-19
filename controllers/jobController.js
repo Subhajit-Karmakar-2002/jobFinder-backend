@@ -4,6 +4,7 @@ const cryptojs = require('crypto-js');
 
 const createJob = async (req, res) => {
     const job = new Job(req.body);
+    job.agentId=req.user.id;
     try {
         const saveJob = await job.save();
         const { __v, createdAt, updatedAt, ...info } = saveJob._doc;
