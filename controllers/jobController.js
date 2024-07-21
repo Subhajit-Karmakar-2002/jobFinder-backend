@@ -1,10 +1,11 @@
+
 const Job = require("../models/Job");
-const cryptojs = require('crypto-js');
+const mongoose = require('mongoose');
 
 
 const createJob = async (req, res) => {
     const job = new Job(req.body);
-    job.agentId=req.user.id;
+    job.agentId = req.user.id;
     try {
         const saveJob = await job.save();
         const { __v, createdAt, updatedAt, ...info } = saveJob._doc;
@@ -69,6 +70,20 @@ const getAllJob = async (req, res) => {
         res.status(500).json(error);
     }
 }
+
+const getAllJobofAgent = async (req, res) => {
+    const agentId = new mongoose.Types.ObjectId(req.params.id);
+    try {
+        const jobs = await Job.find({ agentId: agentId });
+        if (!jobs || jobs.length === 0) {
+            return res.status(404).json({ message: "Jobs not found" });
+        }
+        res.status(200).json(jobs);
+    } catch (error) {
+        res.status(500).json(error);
+    }
+};
+
 const searchJob = async (req, res) => {
     try {
         const job = await Job.aggregate(
@@ -95,4 +110,4 @@ const searchJob = async (req, res) => {
 }
 
 
-module.exports = { createJob, updateJob, getJob, getAllJob, deleteJob, searchJob }
+module.exports = { createJob, updateJob, getJob, getAllJob, deleteJob, searchJob, getAllJobofAgent }

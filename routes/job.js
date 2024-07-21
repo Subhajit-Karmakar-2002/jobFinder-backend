@@ -12,6 +12,8 @@ router.delete("/:id", verifyAndAdmin, jobController.deleteJob);
 
 router.get("/:id", jobController.getJob);
 
+router.get("/agent/:id", jobController.getAllJobofAgent);
+
 router.get("/", jobController.getAllJob);
 
 router.get("/search/:key", jobController.searchJob);
