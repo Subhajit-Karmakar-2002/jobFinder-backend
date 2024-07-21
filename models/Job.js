@@ -7,7 +7,7 @@ const JobSchema = new mongoose.Schema({
     company: { type: String, required: true },
     salary: { type: String, required: true },
     period: { type: String, required: true },
-    hiring: { type: String, required: true },
+    hiring: { type: String, required: true, default: true },
     contract: { type: String, required: true },
     requirements: { type: Array, required: true },
     imageurl: { type: String, required: true },
